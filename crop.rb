@@ -1,7 +1,7 @@
 class Crop
   @@crops = ["corn", "wheat"]
 
-  attr_accessor :type, :size, :yield
+  attr_accessor :type, :size, :yields
 
   def initialize(type, size)
     if @@crops.include?(type)
@@ -15,23 +15,19 @@ class Crop
   end
 
   def self.show_all
-    @@crops.each do |type|
-    puts "- #{type.capitalize}"
-    end
+    @@crops.each {|type| puts "- #{type.capitalize}" }
   end
 
-  def buy_type
+  def buy(type)
     if !@@crops.include?(type)
-      @@crops << buy_type
-      sleep(1)
+      @@crops << type
       puts "Here are your new #{type} seeds."
     else
-      sleep(1)
       puts "You already have #{type} seeds."
     end
   end
 
-  def yield
+  def yields
     yields = (@@crops.index(@type) + 1) * Random.rand(1..6)
     @yields = yields * self.size
 

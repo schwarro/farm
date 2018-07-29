@@ -1,7 +1,7 @@
 require_relative "crop"
 
 class Farm < Crop
-  attr_accessor :total_harvest
+  attr_accessor :harvest
 
   def initialize(name)
     @name = name
@@ -13,7 +13,8 @@ class Farm < Crop
     puts "----------------------------------------"
     puts "Welcome to #{@name} Farm".upcase
 
-    puts "<<~TEXT
+    puts
+    puts <<~TEXT
       --------------------
             Options
       --------------------
@@ -24,20 +25,20 @@ class Farm < Crop
       buy -> buy new seeds
       exit -> exits the program
       --------------------
-    TEXT"
+    TEXT
   end
 
   def start_game
     while true
       display_menu
       option = gets.chomp
-      selectd(option)
+      selected(option)
     end
   end
 
-  def slected(option)
+  def selected(option)
     case option
-    when "field" then create_field
+    when "field" then field
     when "harvest" then harvest
     when "status" then status
     when "relax" then relax
@@ -49,13 +50,19 @@ class Farm < Crop
     end
   end
 
-  def create_field
+  def field
     puts "What kind of field is it going to be?"
+    puts <<~TEXT
+      --------------------
+        Available Crops
+      --------------------
+    TEXT
     Crop.show_all
+    puts "--------------------"
     type = gets.chomp.downcase
 
     if super(type)
-      print "How large is the field?"
+      print "How large is the field? "
       size = gets.to_i
 
       @field << Crop.new(type, size)
@@ -67,6 +74,12 @@ class Farm < Crop
   end
 
   def harvest
+    puts <<~TEXT
+      ----------------------
+      #{@name} Farm Harvest
+      ----------------------
+    TEXT
+
     @fields.each do |crop|
       @harvest += crop.yield
       puts "Harvesting #{crop.yields} food from #{crop.size} hectare of #{crop.type} field"
@@ -79,17 +92,30 @@ class Farm < Crop
   end
 
   def status
-    @fields.each do |field|
+
+    puts <<~TEXT
+      --------------------
+      #{@name} Farm Stats
+      --------------------
+    TEXT
+
+    @field.each do |field|
       puts "#{field.type.capitalize} field is #{field.size} hectares."
     end
 
     puts ""
-    harvested
+    harvest
     puts "\e[H\e[2J"
   end
 
   def relax
-    @fields.each do |field|
+    puts <<~TEXT
+  --------------------
+        Relaxing
+  --------------------
+  TEXT
+
+    @field.each do |field|
       case field.type
       when 'corn'
         puts "#{field.size} hectares of tall green stalks rustling in the breeze fill your horizon."
@@ -106,7 +132,20 @@ class Farm < Crop
   end
 
   def harvest
+    puts "#{@name} Farm has #{@harvest} harvested food so far."
+  end
+
+  def buy
+    puts <<~TEXT
+      --------------------
+          General Store
+      --------------------
+      What would you like to buy?
+    TEXT
+
     new_crop = gets.chomp.downcase
-    puts "Returning to #{@name} Farm"    
+    super(new_crop)
+    puts "Returning to your farm"
+    puts "\e[H\e[2J"
   end
 end
