@@ -1,7 +1,7 @@
 class Crop
   @@crops = ["corn", "wheat"]
 
-  attr_accessor :type, :size, :total_yield
+  attr_accessor :type, :size, :yield
 
   def initialize(type, size)
     if @@crops.include?(type)
@@ -43,6 +43,6 @@ class Crop
       return true
     else
       return false
-    end 
+    end
   end
 end
